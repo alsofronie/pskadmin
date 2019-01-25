@@ -1,95 +1,112 @@
 const interact = require('interact');
-const interactionSpace = interact.createInteractionSpace();
+const is = interact.createInteractionSpace();
 
 
-function createDomain(role, domainName, remoteAlias) {
-    if (!domainName || !remoteAlias) {
+function createDomain(domainName) {
+    if (!domainName) {
         console.error('Missing arguments');
         return;
     }
 
-    interactionSpace.startSwarm('remotes', 'getRemote', remoteAlias).onReturn(function (err, remoteAddress) {
-        if (err) {
-            console.error(err);
-            return;
+    is.startSwarm("connection", "getSelected").onReturn((err, node) => {
+        if(node.remote){
+            console.log(`Start to create domain ${domainName} on ${node.alias} and remote ${node.remote}`);
+
+            const rmis = interact.createRemoteInteractionSpace(node.alias, node.remote, 'local/agent/system');
+
+            rmis.startSwarm('domains', 'add', "basicDomain", domainName).onReturn((err, key) => {
+                if (err) {
+                    console.error(`Domain <${domainName}> failed to create.`);
+                }else{
+                    console.log(`Domain <${domainName}> succefully created.`);
+                }
+            });
+        }else{
+            console.log(`No PSK Node is selected! Run first command use <PSK Node alias>.`);
         }
-
-        if (!remoteAddress) {
-            // treat this case
-            return;
-        }
-
-        const remoteInteractionSpace = interact.createRemoteInteractionSpace(remoteAlias, remoteAddress, 'localhost/agent/system');
-
-        remoteInteractionSpace.startSwarm('domains', 'add', role, domainName).onReturn(function (err, key) {
-            if (err) {
-                console.error(err);
-            }
-
-        });
-
     });
 }
 
 
-function getDomain(domainName, remoteAlias) {
-    if (!domainName || !remoteAlias) {
-        console.error('Missing arguments');
+function listDomainConfiguration(domainName) {
+    if (!domainName) {
+        console.error('Missing <domain name> argument');
         return;
     }
+    is.startSwarm("connection", "getSelected").onReturn((err, node) => {
+        if(node.remote){
+            const rmis = interact.createRemoteInteractionSpace(node.alias, node.remote, 'local/agent/system');
 
-    interactionSpace.startSwarm('remotes', 'getRemote', remoteAlias).onReturn(function (err, remoteAddress) {
-        if (err) {
-            console.error(err);
-            return;
+            rmis.startSwarm('domains', 'getDomainDetails', domainName).onReturn((err, domain) => {
+                if (err) {
+                    console.error(`Failed to extract domain <${domainName}> details.`);
+                }else{
+                    console.log(`Domain <${domainName}> details:`);
+                    console.log(`-----------------------------------`);
+                    console.log(`PSK Node \t Domain name \t Role`);
+                    console.log(`-----------------------------------`);
+                    console.log(`${node.alias} \t\t  ${domainName} \t ${domain.role}`);
+                    console.log(`-----------------------------------`);
+
+                    var i=0;
+                    console.log(`Remote interfaces`);
+                    for(var remoteAlias in node.remoteInterfaces){
+                        console.log(`#${i} - ${remoteAlias} ${node.remoteInterfaces[remoteAlias]}`);
+                        i++;
+                    }
+
+                    if(i==0){
+                        console.log(`0 remote interfaces`);
+                    }
+
+                    i=0;
+                    console.log(`-----------------------------------`);
+                    console.log(`Local interfaces`);
+                    for(var localAlias in node.localInterfaces){
+                        console.log(`#${i} - ${localAlias} ${node.localInterfaces[localAlias]}`);
+                        i++;
+                    }
+                    if(i==0){
+                        console.log(`0 local interfaces`);
+                    }
+                    console.log(`-----------------------------------`);
+                    console.log(domain);
+                }
+            });
+        }else{
+            console.log(`No PSK Node is selected! Run first command use <PSK Node alias>.`);
         }
-
-        if (!remoteAddress) {
-            // treat this case
-            return;
-        }
-
-        const remoteInteractionSpace = interact.createRemoteInteractionSpace(remoteAlias, remoteAddress, 'localhost/agent/system');
-
-        remoteInteractionSpace.startSwarm('domains', 'getDomain', domainName).onReturn(function (err, key) {
-            if (err) {
-                console.error(err);
-            }
-            console.log(key);
-        });
 
     });
 }
 
-function getDomains(remoteAlias) {
-    if(!remoteAlias) {
-        console.error('Missing arguments');
-        return;
-    }
-
-    interactionSpace.startSwarm('remotes', 'getRemote', remoteAlias).onReturn(function (err, remoteAddress) {
-        if (err) {
-            console.error(err);
-            return;
+function listDomains() {
+    is.startSwarm("connection", "getSelected").onReturn((err, node) => {
+        if(node.remote){
+            console.log(`Listing all domains found on ${node.alias} and remote ${node.remote}`);
         }
 
-        if (!remoteAddress) {
-            // treat this case
-            return;
-        }
+        const rmis = interact.createRemoteInteractionSpace(node.alias, node.remote, 'local/agent/system');
 
-        const remoteInteractionSpace = interact.createRemoteInteractionSpace(remoteAlias, remoteAddress, 'localhost/agent/system');
-
-        remoteInteractionSpace.startSwarm('domains', 'getDomains').onReturn(function (err, key) {
+        rmis.startSwarm('domains', 'getDomains').onReturn((err, domains) => {
             if (err) {
-                console.error(err);
+                console.error(`Error while trying to get all domains.`);
+            }else{
+                console.log(`-----------------------------------`);
+                console.log(`PSK Node \t Domain name`);
+                console.log(`-----------------------------------`);
+                for(var i=0; i<domains.length; i++){
+                    var domain = domains[i];
+                    console.log(`${node.alias} \t\t ${domain.publicVars.alias}`);
+                }
+                console.log(`-----------------------------------`);
             }
-            console.log(key);
         });
-
     });
 }
 
-addCommand("create", "domain", createDomain, "<domainName> <remoteName> \t\t\t\t |add a new domain in the specified remote");
-addCommand("get", "domain", getDomain, "<domainName> <remoteName> \t\t\t\t |add a new domain in the specified remote");
-addCommand("get", "domains", getDomains, "<remoteName> \t\t\t\t |add a new domain in the specified remote");
+//connectDomainToRemote
+
+addCommand("create", "domain", createDomain, "<domainName> \t\t\t |add a new domain in the selected PSK Node");
+addCommand("list", "domains", listDomains, " \t\t\t\t\t |list all domains from the selected PSK Node");
+addCommand("list", "domain", listDomainConfiguration, "<domainName> \t\t\t\t |list domain configuration");

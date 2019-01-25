@@ -1,7 +1,9 @@
 module.exports = $$.library(function () {
-    require('./agents');
+    require('./connections');
     require('./domains');
-    require('./remotes');
+    /*require('./agents');
+    require('./domains');
+    require('./remotes');*/
 });
 
 

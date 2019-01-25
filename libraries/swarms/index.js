@@ -1,5 +1,6 @@
 module.exports = $$.library(function () {
-    require('./remotes');
+    require('./connections');
+    /*require('./remotes');*/
 });
 
 

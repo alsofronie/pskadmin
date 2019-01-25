@@ -1,5 +1,9 @@
 require('../../builds/devel/pskruntime');
-require("callflow");
+require('../../builds/devel/psknode');
+
+//require("callflow");
+require("pskdb").startDB('./config');
+$$.loadLibrary("assets", require("./libraries/assets/index"));
 
 const pskConsole = require('swarmutils').createPskConsole();
 $$.loadLibrary("cmds",require('./libraries/cmds/index'));

@@ -14,7 +14,6 @@ function getRemotes(...args) {
             console.error(err);
             return;
         }
-
         console.log(result);
     });
 }
