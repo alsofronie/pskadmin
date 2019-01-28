@@ -70,7 +70,6 @@ function listDomainConfiguration(domainName) {
                         console.log(`0 local interfaces`);
                     }
                     console.log(`-----------------------------------`);
-                    console.log(domain);
                 }
             });
         }else{

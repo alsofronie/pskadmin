@@ -39,7 +39,6 @@ $$.swarm.describe('remotes', {
         }
     },
     getRemotes: function () {
-        console.log("super bau bau bau");
         const transaction = $$.blockchain.beginTransaction(configTransactionSwarm);
         const remotes     = transaction.loadAssets('global.remote') || [];
 
