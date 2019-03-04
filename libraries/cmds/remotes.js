@@ -40,7 +40,7 @@ function getRemote(...args) {
     });
 }
 
-addCommand("add", "remote", addRemote, "<alias> <endpoint> <domainName>\t\t\t\t |add a new remote with alias to specific domain");
+addCommand("add", "remote", addRemote, "<remoteAlias> <remoteEndpoint> <domainName>\t\t\t\t |add a new remote with alias to specific domain");
 
 /*
 addCommand("add", "remote", addRemote, "<alias> <endpoint>\t\t\t\t |add a new remote to local domain with alias");

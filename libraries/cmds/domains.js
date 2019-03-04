@@ -18,7 +18,7 @@ function createDomain(domainName) {
                 if (err) {
                     console.error(`Domain <${domainName}> failed to create.`);
                 }else{
-                    console.log(`Domain <${domainName}> succefully created.`);
+                    console.log(`Domain <${domainName}> successfully created.`);
                 }
             });
         }else{
