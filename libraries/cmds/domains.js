@@ -9,6 +9,9 @@ function createDomain(domainName) {
     }
 
     is.startSwarm("connection", "getSelected").onReturn((err, node) => {
+        if (err) {
+            console.log(err);
+        }
         if(node.remote){
             console.log(`Start to create domain ${domainName} on ${node.alias} and remote ${node.remote}`);
 
@@ -34,6 +37,9 @@ function listDomainConfiguration(domainName) {
         return;
     }
     is.startSwarm("connection", "getSelected").onReturn((err, node) => {
+        if (err ) {
+            console.log(err);
+        }
         if(node.remote){
             const rmis = interact.createRemoteInteractionSpace(node.alias, node.remote, 'local/agent/system');
 
@@ -55,7 +61,7 @@ function listDomainConfiguration(domainName) {
                         i++;
                     }
 
-                    if(i==0){
+                    if(i === 0){
                         console.log(`0 remote interfaces`);
                     }
 
@@ -66,7 +72,7 @@ function listDomainConfiguration(domainName) {
                         console.log(`#${i} - ${localAlias} ${domain.publicVars.localInterfaces[localAlias]}`);
                         i++;
                     }
-                    if(i==0){
+                    if(i === 0){
                         console.log(`0 local interfaces`);
                     }
                     console.log(`-----------------------------------`);
@@ -81,6 +87,9 @@ function listDomainConfiguration(domainName) {
 
 function listDomains() {
     is.startSwarm("connection", "getSelected").onReturn((err, node) => {
+        if (err) {
+            console.log(err);
+        }
         if(node.remote){
             console.log(`Listing all domains found on ${node.alias} and remote ${node.remote}`);
         }
@@ -88,7 +97,7 @@ function listDomains() {
         const rmis = interact.createRemoteInteractionSpace(node.alias, node.remote, 'local/agent/system');
 
         rmis.startSwarm('domains', 'getDomains').onReturn((err, domains) => {
-            console.log(err, domains)
+            console.log(err, domains);
             if (err) {
                 console.error(`Error while trying to get all domains.`);
             }else{

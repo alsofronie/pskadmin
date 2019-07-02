@@ -42,6 +42,6 @@ $$.swarm.describe('remotes', {
         const transaction = $$.blockchain.beginTransaction(configTransactionSwarm);
         const remotes     = transaction.loadAssets('global.remote') || [];
 
-        this.swarm('interaction', '__return__', undefined, remotes.map(remote => remote.getRawData()));
+        this.swarm('interaction', '__return__', undefined, remotes.map((remote) => remote.getRawData()));
     }
 });

@@ -12,6 +12,9 @@ function addAgent(agentName) {
     }
 
     interactionSpace.startSwarm("connection", "getSelected").onReturn((err, node) => {
+        if (err) {
+            console.log(err);
+        }
         if(!node.remote) {
             console.log(`No PSK Node is selected! Run first command use <PSK Node alias>.`);
             return;

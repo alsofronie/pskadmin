@@ -1,4 +1,4 @@
-const interactionSpace = require("interact").createInteractionSpace();
+// const interactionSpace = require("interact").createInteractionSpace();
 
 const base = require("./base");
 
@@ -9,11 +9,14 @@ function addRemote(alias, remote, domainName) {
     }
 
     base.createRemoteInteraction((err, rmis) => {
+        if (err) {
+            console.log(err);
+        }
         rmis.startSwarm('domains', 'connectDomainToRemote', domainName, alias, remote).onReturn(function (err) {
             if (err) {
                 console.error(err);
             }else{
-                console.log(`Succefully added remote interface called ${alias} - ${remote} to domain ${domainName}`)
+                console.log(`Succefully added remote interface called ${alias} - ${remote} to domain ${domainName}`);
             }
         });
     });

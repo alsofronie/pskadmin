@@ -25,6 +25,9 @@ function useNode(alias){
 
 function listNodes(){
     interactionSpace.startSwarm('connection', 'list').onReturn(function (err, result) {
+        if (err) {
+            console.log(err);
+        }
         console.log("-----------------------------------------");
         console.log(`| Alias \t Remote`);
         console.log("-----------------------------------------");
