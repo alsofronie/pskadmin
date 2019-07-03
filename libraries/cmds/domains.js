@@ -51,13 +51,13 @@ function listDomainConfiguration(domainName) {
                     console.log(`-----------------------------------`);
                     console.log(`PSK Node \t Domain name \t Role`);
                     console.log(`-----------------------------------`);
-                    console.log(`${node.alias} \t\t  ${domainName} \t ${domain.publicVars.role}`);
+                    console.log(`${node.alias} \t\t  ${domainName} \t ${domain.public.role}`);
                     console.log(`-----------------------------------`);
 
                     var i=0;
                     console.log(`Remote interfaces`);
-                    for(var remoteAlias in domain.publicVars.remoteInterfaces){
-                        console.log(`#${i} - ${remoteAlias} ${domain.publicVars.remoteInterfaces[remoteAlias]}`);
+                    for(var remoteAlias in domain.public.remoteInterfaces){
+                        console.log(`#${i} - ${remoteAlias} ${domain.public.remoteInterfaces[remoteAlias]}`);
                         i++;
                     }
 
@@ -68,8 +68,8 @@ function listDomainConfiguration(domainName) {
                     i=0;
                     console.log(`-----------------------------------`);
                     console.log(`Local interfaces`);
-                    for(var localAlias in domain.publicVars.localInterfaces){
-                        console.log(`#${i} - ${localAlias} ${domain.publicVars.localInterfaces[localAlias]}`);
+                    for(var localAlias in domain.public.localInterfaces){
+                        console.log(`#${i} - ${localAlias} ${domain.public.localInterfaces[localAlias]}`);
                         i++;
                     }
                     if(i === 0){
@@ -106,7 +106,7 @@ function listDomains() {
                 console.log(`-----------------------------------`);
                 for(var i=0; i<domains.length; i++){
                     var domain = domains[i];
-                    console.log(`${node.alias} \t\t ${domain.publicVars.alias} \t ${domain.publicVars.role}`);
+                    console.log(`${node.alias} \t\t ${domain.public.alias} \t ${domain.public.role}`);
                 }
                 console.log(`-----------------------------------`);
             }

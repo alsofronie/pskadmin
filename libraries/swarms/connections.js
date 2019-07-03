@@ -28,7 +28,7 @@ $$.swarm.describe('connection', {
         const transaction  = $$.blockchain.beginTransaction({});
         const nodes        = transaction.loadAssets('global.PSKNode') || [];
 
-        this.swarm('interaction', '__return__', undefined, nodes.map((node) => beesHealer.asJSON(node).publicVars));
+        this.swarm('interaction', '__return__', undefined, nodes.map((node) => beesHealer.asJSON(node).public));
     },
     getSelected: function(){
         const transaction  = $$.blockchain.beginTransaction({});
@@ -39,6 +39,6 @@ $$.swarm.describe('connection', {
             node = transaction.lookup('global.PSKNode', currentNode.selectedNode);
         }
 
-        this.swarm('interaction', '__return__', undefined, node ? beesHealer.asJSON(node).publicVars : {});
+        this.swarm('interaction', '__return__', undefined, node ? beesHealer.asJSON(node).public : {});
     }
 });
